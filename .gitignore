@@ -47,3 +47,6 @@ Thumbs.db
 .cache
 .project
 .AppleDouble
+
+# temporary directory
+tmp/*

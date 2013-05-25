@@ -17,14 +17,9 @@ cloudcreds = {
     'api_secretkey':		os.environ.get('PICLOUD_API_SECRET_KEY'),
 }
 
-# Heroku Configuration
-dbURL = os.environ.get('MONGOHQ_URL')
+# MongoHQ Configuration
+MONGO_URI = os.environ.get('MONGOHQ_URL')
 
-# Memcache Configuration
-memcacheconfig = {
-    'servers':			os.environ.get('MEMCACHIER_SERVERS'),
-    'username':			os.environ.get('MEMCACHIER_USERNAME'),
-    'password':			os.environ.get('MEMCACHIER_PASSWORD'),
-    'binary':			True,
-}
-
+# Redis Cloud Configuration
+CACHE_TYPE = 'redis'
+CACHE_REDIS_URL = os.environ.get('REDISCLOUD_URL')
