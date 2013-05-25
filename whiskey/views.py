@@ -11,6 +11,14 @@ def index ():
 
 @app.route('/test')
 def testsuite ():
+
+    testfunc = lambda x: x**2
+    testvalue = 42
+    testdict = {'author': 'Linus', 'title': 'Linux', 'category': 'OS'}
+
+    jid = cloud.call(testfunc, testvalue)
+    cache.set('testvalue', testvalue, timeout = 5 * 60)
+
     lines = ['<html><head><title>Test Suite</title></head><body><pre>']
     hline = '\n' + '-'*80 + '\n'
 
@@ -23,15 +31,30 @@ def testsuite ():
 
     lines.append(hline)
 
-    testfunc = lambda x: x**2
-    testval = 5
+    testvalue1 = cache.get('testvalue')
+    lines.append('Testing Cache\n')
+    lines.append('cache.set(\'testvalue\', {0}, timeout)'.format(testvalue))
+    lines.append('cache.get(\'testvalue\') --> {}'.format(testvalue1))
+
+    lines.append(hline)
+
+    lines.append('Testing Database\n')
+
+    collection = mongo.db.test_collection
+    id = collection.insert(testdict)
+
+    lines.append('testdict = {!r}'.format(testdict))
+    lines.append('collection.insert(testdict) --> {}'.format(id))
+    lines.append('db.collection_names() --> {}'.format(mongo.db.collection_names()))
+    lines.append('collection.find_one() --> {}'.format(collection.find_one()))
+
+    lines.append(hline)
 
     lines.append('Testing PiCloud\n')
     
-    jid = cloud.call(testfunc, testval)
     lines.append('\tRunning job: {}'.format(jid))
     result = cloud.result(jid)
-    lines.append('\tResult: {0} * {0} = {1}'.format(testval, result))
+    lines.append('\tResult: {0} * {0} = {1}'.format(testvalue, result))
 
     lines.append(hline)
 
