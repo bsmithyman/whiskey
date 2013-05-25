@@ -13,9 +13,9 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 # Login Setup
-lm = LoginManager()
-lm.init_app(app)
-lm.login_view = 'login'
+#lm = LoginManager()
+#lm.init_app(app)
+#lm.login_view = 'login'
 
 # MongoDB Setup
 mongo = PyMongo(app)
