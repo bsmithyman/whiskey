@@ -33,3 +33,17 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Virtualenv for development
+whiskey-venv
+
+# Environment file for Heroku testing
+.env
+
+# Apple nonsense files
+.DS_Store
++._*
+Thumbs.db
+.cache
+.project
+.AppleDouble
