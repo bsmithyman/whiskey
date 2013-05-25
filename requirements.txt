@@ -1,0 +1,12 @@
+Flask==0.9
+Jinja2==2.7
+MarkupSafe==0.18
+Werkzeug==0.8.3
+boto==2.9.4
+cloud==2.7.9
+docopt==0.6.1
+gitpress==0.3
+gunicorn==0.17.4
+markdown2==2.1.0
+path-and-address==0.2.0
+wsgiref==0.1.2
