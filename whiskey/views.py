@@ -37,6 +37,16 @@ def index ():
     }
     return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
 
+@app.route('/animtest')
+def animtest ():
+    pageinfo = {
+        'ajax':         True,
+        'animheader':   True,
+        'title':	'animtest',
+	'heading':	'animation test',
+    }
+    return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
+
 # ------------------------------------------------------------------------
 # User Authentication
 

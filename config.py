@@ -31,18 +31,23 @@ jinja_env = {
 
 staticinfo = {
     'siteroot':		'http://www.ostensibly.me/',
-    'media':		'http://static.ostensibly.me/',
+    'media':		'//static.ostensibly.me/',
     'sitename':		'ostensibly.me',
-    'tagline':		'powered by whiskey',
+    'tagline':		'> powered by whiskey',
     'stylesheets':	{
 	'':		'stylesheet.css',
 #	'print':	'print.css',
 #	'handheld':	'mobile.css',
     },
+    'ajax':		False,
+    'animheader':	False,
+    'scripturls':	[
+	'//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js'
+    ],
     'navigation':	[
-	{'href': '/index', 'title': 'index'},
-	{'href': '/science', 'title': 'science'},
-	{'href': '/about', 'title': 'about'},
-	{'href': '/etc', 'title': 'etc'},
+	{'href': '/index',	'title': 'index'},
+	{'href': '/animtest',	'title': 'animtest'},
+	{'href': '/about',	'title': 'about'},
+	{'href': '/etc',	'title': 'etc'},
     ],
 }

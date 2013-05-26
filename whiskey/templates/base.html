@@ -6,10 +6,20 @@
   <link rel="stylesheet" type="text/css" {% if key %}media="{{ key }}" {% endif %}href="{{ pageinfo['media'] + pageinfo['stylesheets'][key] }}" />
     {% endfor %}
   {% endif %}
+  {% if pageinfo['ajax'] and pageinfo['scripturls'] %}
+    {% for scripturl in pageinfo['scripturls'] %}
+  <script src="{{ scripturl }}"></script>
+    {% endfor %}
+  {% endif %}
+  {% if pageinfo['ajax'] and pageinfo['animheader'] %}
+  <script>
+  {% include 'animheader.js' %}
+  </script>
+  {% endif %}
   {% if pageinfo['title'] %}
   <title>{{ pageinfo['title'] }} | {{ pageinfo['sitename'] }}</title>
   {% else %}
-  <title>{{ pageinfo['sitename'] }}ostensibly.me</title>
+  <title>{{ pageinfo['sitename'] }}</title>
   {% endif %}
 </head>
 <body>
