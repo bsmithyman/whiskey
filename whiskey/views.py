@@ -45,7 +45,7 @@ def animtest ():
         'title':	'animtest',
 	'heading':	'animation test',
     }
-    return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
+    return render_template('animtest.html', pageinfo = generate_pageinfo(pageinfo))
 
 # ------------------------------------------------------------------------
 # User Authentication
