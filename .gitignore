@@ -50,3 +50,6 @@ Thumbs.db
 
 # temporary directory
 tmp/*
+
+# vim swapfile
+*.swp

@@ -9,16 +9,16 @@ from helper import generate_pageinfo
 @app.errorhandler(404)
 def page_not_found (error):
     pageinfo = {
-	'title':	'404',
-        'heading':	'you are lost',
+        'title':        '404',
+        'heading':      'you are lost',
     }
     return render_template('404.html', pageinfo = generate_pageinfo(pageinfo)), 404
 
 @app.errorhandler(500)
 def internal_error (error):
     pageinfo = {
-	'title':	'500',
-        'heading':	'computer over',
+        'title':        '500',
+        'heading':      'computer over',
     }
     # Clean up DB, etc.
     return render_template('500.html', pageinfo = generate_pageinfo(pageinfo)), 500
@@ -33,7 +33,7 @@ def root ():
 @app.route('/index')
 def index ():
     pageinfo = {
-	'title':	'index',
+        'title':        'index',
     }
     return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
 
@@ -42,8 +42,8 @@ def animtest ():
     pageinfo = {
         'ajax':         True,
         'animheader':   True,
-        'title':	'animtest',
-	'heading':	'animation test',
+        'title':        'animtest',
+        'heading':      'animation test',
     }
     return render_template('animtest.html', pageinfo = generate_pageinfo(pageinfo))
 
@@ -53,8 +53,8 @@ def animtest ():
 @app.route('/login', methods = ['GET', 'POST'])
 def login ():
     pageinfo = {
-        'title':	'login',
-	'heading':	'login required',
+        'title':        'login',
+        'heading':      'login required',
     }
     return render_template('login.html', pageinfo = generate_pageinfo(pageinfo))
 
