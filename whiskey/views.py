@@ -118,5 +118,8 @@ def testsuite ():
 
     lines.append('</pre></body></html>')
     return '\n'.join(lines)
-    
-    
+
+@app.route('/forceerror')
+def forceerror ():
+    raise Exception   
+

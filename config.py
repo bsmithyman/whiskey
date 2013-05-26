@@ -47,7 +47,7 @@ staticinfo = {
     'navigation':	[
 	{'href': '/index',	'title': 'index'},
 	{'href': '/animtest',	'title': 'animtest'},
-	{'href': '/about',	'title': 'about'},
-	{'href': '/etc',	'title': 'etc'},
+	{'href': '/notfound',	'title': '404'},
+	{'href': '/forceerror',	'title': '500'},
     ],
 }
