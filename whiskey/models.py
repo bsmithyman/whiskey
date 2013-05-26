@@ -17,7 +17,7 @@ class User (dict):
             'email':           	'',
             'ghlogin':          '',
             'profile':          '',
-            'active':		False, 
+            'active':		    False, 
             'posts':            [],
         }
 
@@ -48,3 +48,20 @@ class User (dict):
     def get_all (self, matchdict):
         docs = mongo.db['users'].find(matchdict)
         return [User(item) for item in docs]
+    
+    def save (self):
+        id = mongo.db['users'].insert(dict(self))
+        self['_id'] = id
+
+class Post (dict):
+    
+    def __init__ (self, initdict):
+        dict.__init__(self)
+        
+        def get (self, matchdict):
+            return Post(mongo.db['posts'].find_one(matchdict)
+        
+        def get_all (self, matchdict):
+            docs = mongo.db['posts'].find(matchdict)
+            return [Post(item) for item in docs] 
+        
