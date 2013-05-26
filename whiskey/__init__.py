@@ -1,5 +1,5 @@
 import os
-from config import basedir, botocreds, cloudcreds
+from config import basedir, botocreds, cloudcreds, jinja_env
 
 from flask import Flask
 from flask.ext.login import LoginManager
@@ -12,10 +12,14 @@ import boto
 app = Flask(__name__)
 app.config.from_object('config')
 
+# Configure Jinja2 templating engine
+for key in jinja_env:
+  setattr(app.jinja_env, key, jinja_env[key])
+
 # Login Setup
-#lm = LoginManager()
-#lm.init_app(app)
-#lm.login_view = 'login'
+lm = LoginManager()
+lm.init_app(app)
+lm.login_view = 'login'
 
 # MongoDB Setup
 mongo = PyMongo(app)

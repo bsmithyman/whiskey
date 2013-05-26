@@ -1,5 +1,30 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
+from flask.ext.login import login_user, logout_user, current_user, login_required
 from whiskey import app, mongo, cloud, boto, cache, s3
+from helper import generate_pageinfo
+
+# ------------------------------------------------------------------------
+# HTTP Errors
+
+@app.errorhandler(404)
+def page_not_found (error):
+    pageinfo = {
+	'title':	'404',
+        'heading':	'you are lost',
+    }
+    return render_template('404.html', pageinfo = generate_pageinfo(pageinfo)), 404
+
+@app.errorhandler(500)
+def internal_error (error):
+    pageinfo = {
+	'title':	'500',
+        'heading':	'computer over',
+    }
+    # Clean up DB, etc.
+    return render_template('500.html', pageinfo = generate_pageinfo(pageinfo)), 500
+
+# ------------------------------------------------------------------------
+# Normal Views
 
 @app.route('/')
 def root ():
@@ -7,9 +32,32 @@ def root ():
 
 @app.route('/index')
 def index ():
-    return 'Hello World!'
+    pageinfo = {
+	'title':	'index',
+    }
+    return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
+
+# ------------------------------------------------------------------------
+# User Authentication
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login ():
+    pageinfo = {
+        'title':	'login',
+	'heading':	'login required',
+    }
+    return render_template('login.html', pageinfo = generate_pageinfo(pageinfo))
+
+@app.route('/logout')
+def logout ():
+    # logout_user()
+    return redirect(url_for('index'))
+
+# ------------------------------------------------------------------------
+# Test Suite
 
 @app.route('/test')
+@login_required
 def testsuite ():
 
     testfunc = lambda x: x**2
@@ -57,7 +105,6 @@ def testsuite ():
     lines.append('\tResult: {0} * {0} = {1}'.format(testvalue, result))
 
     lines.append(hline)
-
 
     lines.append('</pre></body></html>')
     return '\n'.join(lines)

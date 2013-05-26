@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% if pageinfo['stylesheets'] %}
+    {% for key in pageinfo['stylesheets'] %}
+  <link rel="stylesheet" type="text/css" {% if key %}media="{{ key }}" {% endif %}href="{{ pageinfo['media'] + pageinfo['stylesheets'][key] }}" />
+    {% endfor %}
+  {% endif %}
+  {% if pageinfo['title'] %}
+  <title>{{ pageinfo['title'] }} | {{ pageinfo['sitename'] }}</title>
+  {% else %}
+  <title>{{ pageinfo['sitename'] }}ostensibly.me</title>
+  {% endif %}
+</head>
+<body>
+  <div id="pagewrapper">
+  {% block pageheader %}
+  <div id="pageheader">
+    <span id="sitename">{{ pageinfo['sitename'] }}</span>&nbsp;<span id="tagline">{{ pageinfo['tagline'] }}</span>
+  </div>
+  {% endblock %}
+
+  {% if pageinfo['navigation'] %}
+  <ul id="navlist">
+    {% for item in pageinfo['navigation'] %}
+      <a {% if item['title'] == pageinfo['title'] %}class='current' {% endif %}href="{{ item['href'] }}" title="{{ item['title'] }}"><li>{{ item['title'] }}</li></a>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <div id="subpagewrapper">
+
+  <div id="headingshim">
+  {% if pageinfo['heading'] %}
+  <h1>{{ pageinfo['heading'] }}</h1>
+  {% endif %}
+  </div>
+
+  <div id="content">
+  {% block content %}{% endblock %}
+  </div>
+  </div>
+  </div>
+  </body>
+</html>

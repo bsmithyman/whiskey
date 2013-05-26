@@ -23,3 +23,26 @@ MONGO_URI = os.environ.get('MONGOHQ_URL')
 # Redis Cloud Configuration
 CACHE_TYPE = 'redis'
 CACHE_REDIS_URL = os.environ.get('REDISCLOUD_URL')
+
+jinja_env = {
+    'trim_blocks':	True,
+    'lstrip_blocks':	True,
+}
+
+staticinfo = {
+    'siteroot':		'http://www.ostensibly.me/',
+    'media':		'http://static.ostensibly.me/',
+    'sitename':		'ostensibly.me',
+    'tagline':		'powered by whiskey',
+    'stylesheets':	{
+	'':		'stylesheet.css',
+#	'print':	'print.css',
+#	'handheld':	'mobile.css',
+    },
+    'navigation':	[
+	{'href': '/index', 'title': 'index'},
+	{'href': '/science', 'title': 'science'},
+	{'href': '/about', 'title': 'about'},
+	{'href': '/etc', 'title': 'etc'},
+    ],
+}
