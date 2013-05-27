@@ -19,10 +19,13 @@ class User (dict):
             'profile':          '',
             'active':		    False, 
             'posts':            [],
-        }
+        })
 
         if (initdict):
             self.update(initdict)
+
+    def __repr__ (self):
+        return '<User {0!r}>'.format(self['nickname'])
 
     def is_authenticated (self):
         return True
@@ -35,9 +38,6 @@ class User (dict):
 
     def get_id (self):
         return unicode(self.id)
-
-    def __repr__ (self):
-        return '<User {0!r}>'.format(self['nickname'])
 
     def avatar (self, size):
         return 'http://www.gravatar.com/avatar/{0}?d=mm&s={1}'.format(md5(self['email']).hexdigest(), str(size))
@@ -54,14 +54,32 @@ class User (dict):
         self['_id'] = id
 
 class Post (dict):
-    
-    def __init__ (self, initdict):
+
+    def __init__ (self, initdict = None):
         dict.__init__(self)
-        
-        def get (self, matchdict):
-            return Post(mongo.db['posts'].find_one(matchdict)
-        
-        def get_all (self, matchdict):
-            docs = mongo.db['posts'].find(matchdict)
-            return [Post(item) for item in docs] 
-        
+
+        self.update({
+            'title':            '',
+            'author':           None,
+            'contributors':     [],
+            'slug':             '',
+            'content':          '',
+            'linked':           '',
+        }) 
+
+        if (initdict):
+            self.update(initdict)
+
+    def __repr__ (self):
+        return '<Post {0!r}>'.format(self['title'])
+
+    def get (self, matchdict):
+        return Post(mongo.db['posts'].find_one(matchdict)
+
+    def get_all (self, matchdict):
+        docs = mongo.db['posts'].find(matchdict)
+        return [Post(item) for item in docs] 
+
+    def save (self):
+        id = mongo.db['users'].insert(dict(self))
+        self['_id'] = id
