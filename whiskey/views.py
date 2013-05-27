@@ -88,7 +88,7 @@ def logout ():
 # Test Suite
 
 @app.route('/test')
-#@login_required
+@login_required
 def testsuite ():
 
     testfunc = lambda x: x**2
@@ -145,7 +145,7 @@ def forceerror ():
     raise Exception   
 
 @app.route('/modeltest')
-#@login_required
+@login_required
 def modeltest ():
     a = User()
     a['nickname'] =     'brendan'
