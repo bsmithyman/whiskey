@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from whiskey import app, mongo, cloud, boto, cache, s3
-from helper import generate_pageinfo
+from helper import *
 from models import User, Post
 
 # ------------------------------------------------------------------------
@@ -13,7 +13,8 @@ def page_not_found (error):
         'title':        '404',
         'heading':      'you are lost',
     }
-    return render_template('404.html', pageinfo = generate_pageinfo(pageinfo)), 404
+    pageinfo = generate_pageinfo(pageinfo)
+    return render_template('404.html', pageinfo = pageinfo), 404
 
 @app.errorhandler(500)
 def internal_error (error):
@@ -21,8 +22,9 @@ def internal_error (error):
         'title':        '500',
         'heading':      'computer over',
     }
+    pageinfo = generate_pageinfo(pageinfo)
     # Clean up DB, etc.
-    return render_template('500.html', pageinfo = generate_pageinfo(pageinfo)), 500
+    return render_template('500.html', pageinfo = pageinfo), 500
 
 # ------------------------------------------------------------------------
 # Normal Views
@@ -36,17 +38,19 @@ def index ():
     pageinfo = {
         'title':        'index',
     }
-    return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
+    pageinfo = generate_pageinfo(pageinfo)
+    return render_template('index.html', pageinfo = pageinfo)
 
 @app.route('/animtest')
 def animtest ():
     pageinfo = {
         'ajax':         True,
-        'animheader':   True,
         'title':        'animtest',
         'heading':      'animation test',
     }
-    return render_template('animtest.html', pageinfo = generate_pageinfo(pageinfo))
+    pageinfo = generate_pageinfo(pageinfo)
+    pageinfo = add_animheader(pageinfo)
+    return render_template('animtest.html', pageinfo = pageinfo)
 
 @app.route('/profile/<nickname>')
 def profile (nickname):
@@ -77,7 +81,8 @@ def login ():
         'title':        'login',
         'heading':      'login required',
     }
-    return render_template('login.html', pageinfo = generate_pageinfo(pageinfo))
+    pageinfo = generate_pageinfo(pageinfo)
+    return render_template('login.html', pageinfo = pageinfo)
 
 @app.route('/logout')
 def logout ():
