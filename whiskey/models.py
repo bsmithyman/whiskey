@@ -54,7 +54,7 @@ class User (dict):
         return [User(item) for item in docs]
     
     def save (self):
-        id = mongo.db['users'].insert(dict(self))
+        id = mongo.db['users'].save(dict(self))
         self['_id'] = id
 
 class Post (dict):
@@ -88,5 +88,5 @@ class Post (dict):
         return [Post(item) for item in docs] 
 
     def save (self):
-        id = mongo.db['users'].insert(dict(self))
+        id = mongo.db['users'].save(dict(self))
         self['_id'] = id
