@@ -68,7 +68,7 @@ class Post (dict):
             'contributors':     [],
             'slug':             '',
             'content':          '',
-            'linked':           '',
+            'linked':           [],
         }) 
 
         if (initdict):

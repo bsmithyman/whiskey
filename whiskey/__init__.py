@@ -34,4 +34,4 @@ cloud.setkey(**cloudcreds)
 s3 = boto.connect_s3()
 
 
-from whiskey import views, models, forms
+from whiskey import views, models, forms, gfm

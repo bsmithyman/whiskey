@@ -1,8 +1,10 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from whiskey import app, mongo, cloud, boto, cache, s3
+from whiskey import app, mongo, cloud, boto, cache, s3, gfm
 from helper import *
 from models import User, Post
+from bson.objectid import ObjectId
+import misaka
 
 # ------------------------------------------------------------------------
 # HTTP Errors
@@ -71,6 +73,20 @@ def users ():
     pageinfo = generate_pageinfo(pageinfo)
     pageinfo.update({'foundusers': User().get_all()})
     return render_template('users.html', pageinfo = pageinfo)
+
+@app.route('/post/<identifier>')
+def post (identifier):
+    pageinfo = {
+        'title':        'post',
+        'heading':      'post heading',
+    }
+    pageinfo = generate_pageinfo(pageinfo)
+    # This is probably dangerous; TODO: fix Post URL scheme.
+    post = Post().get({'_id': ObjectId(identifier)})
+    postinfo = dict(post)
+    postinfo.update({'html': misaka.html(gfm.gfm(post['content']))})
+    pageinfo.update({'postinfo': postinfo, 'heading': post['title'], 'title': post['title'], 'author': User().get({'_id': post['author']})})
+    return render_template('post.html', pageinfo = pageinfo)
 
 # ------------------------------------------------------------------------
 # User Authentication

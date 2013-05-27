@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+{% if pageinfo['postinfo'] %}
+<div class="post">
+  <div class="postheader">
+    <img src="{{ pageinfo['author'].avatar(128) }}" class="bigavatar" />
+    <p>by {{ pageinfo['author']['fullname'] }}</p>
+  </div>
+  <div class="postbody">
+  {{ pageinfo['postinfo']['html']|safe }}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

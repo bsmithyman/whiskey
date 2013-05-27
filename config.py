@@ -40,7 +40,6 @@ staticinfo = {
 #	'handheld':	'mobile.css',
     },
     'ajax':		False,
-    'animheader':	False,
     'scripturls':	[
 	'//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js'
     ],
