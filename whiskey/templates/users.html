@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+{% if pageinfo['foundusers'] %}
+<div class="userlist">
+  {% for user in pageinfo['foundusers'] %}
+  <a href="{{ url_for('profile', nickname = user['nickname']) }}"> 
+    <div class="userentry">
+      <img src="{{ user.avatar(64) }}" alt="{{ user['fullname'] }}" class="smallavatar" />
+      <!-- <p id="uenickname">{{ user['nickname'] }}</p> -->
+      <p id="uefullname">{{ user['fullname'] }}</p>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

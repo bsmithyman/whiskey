@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+{% if pageinfo['founduser'] %}
+<img src="{{ pageinfo['founduser'].avatar(128) }}" alt="{{ pageinfo['founduser']['fullname'] }}" class="bigavatar" />
+<p class="emailline">{{ pageinfo['founduser']['fullname'] }} &lt;<a href="mailto:{{ pageinfo['founduser']['email'] }}">{{ pageinfo['founduser']['email'] }}</a>&gt;</p>
+<p class="profile">{{ pageinfo['founduser']['profile'] }}</p>
+{% endif %}
+
+{% endblock %}

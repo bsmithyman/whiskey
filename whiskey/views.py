@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from whiskey import app, mongo, cloud, boto, cache, s3
 from helper import generate_pageinfo
+from models import User, Post
 
 # ------------------------------------------------------------------------
 # HTTP Errors
@@ -47,6 +48,26 @@ def animtest ():
     }
     return render_template('animtest.html', pageinfo = generate_pageinfo(pageinfo))
 
+@app.route('/profile/<nickname>')
+def profile (nickname):
+    pageinfo = {
+        'title':        'profile',
+        'heading':      nickname,
+    } 
+    pageinfo = generate_pageinfo(pageinfo)
+    pageinfo.update({'founduser': User().get({'nickname': nickname})})
+    return render_template('profile.html', pageinfo = pageinfo)
+
+@app.route('/users')
+def users ():
+    pageinfo = {
+        'title':        'users',
+        'heading':      'site users',
+    }
+    pageinfo = generate_pageinfo(pageinfo)
+    pageinfo.update({'foundusers': User().get_all()})
+    return render_template('users.html', pageinfo = pageinfo)
+
 # ------------------------------------------------------------------------
 # User Authentication
 
@@ -67,7 +88,7 @@ def logout ():
 # Test Suite
 
 @app.route('/test')
-@login_required
+#@login_required
 def testsuite ():
 
     testfunc = lambda x: x**2
@@ -123,3 +144,37 @@ def testsuite ():
 def forceerror ():
     raise Exception   
 
+@app.route('/modeltest')
+#@login_required
+def modeltest ():
+    a = User()
+    a['nickname'] =     'brendan'
+    a['fullname'] =     'Brendan Smithyman'
+    a['email'] =        'brendan@bitsmithy.net'
+    a['ghlogin'] =      'bsmithyman'
+    a['profile'] =      'This is a bio about me.'
+    a.save()
+
+    beninfo = {
+        'nickname':     'ben',
+        'fullname':     'Ben Postlethwaite',
+        'email':        'post.ben.here@gmail.com',
+        'ghlogin':      'bpostlethwaite',
+        'profile':      'This is a bio about Ben.',
+    }
+         
+    b = User(beninfo)
+    b.save()
+
+    a1 = User().get({'nickname': 'ben'})
+    b1 = User().get_all({'email': a['email']})
+
+    lines = []
+
+    for eadict in [a1, b1[0]]:
+        lines.append('{0!r}'.format(eadict))
+        for key in eadict:
+            lines.append('\t\'{0}\' -> {1}'.format(key, eadict[key]))
+        lines.append('')
+
+    return '\n'.join(lines)

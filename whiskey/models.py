@@ -1,5 +1,5 @@
 from whiskey import app, mongo, lm
-from flask.ext.login import 
+#from flask.ext.login import 
 from bson.objectid import ObjectId
 from hashlib import md5
 
@@ -14,6 +14,7 @@ class User (dict):
 
         self.update({
             'nickname':        	'',
+            'fullname':         '',
             'email':           	'',
             'ghlogin':          '',
             'profile':          '',
@@ -25,7 +26,7 @@ class User (dict):
             self.update(initdict)
 
     def __repr__ (self):
-        return '<User {0!r}>'.format(self['nickname'])
+        return '<User {0!s}>'.format(self['nickname'])
 
     def is_authenticated (self):
         return True
@@ -45,8 +46,11 @@ class User (dict):
     def get (self, matchdict):
         return User(mongo.db['users'].find_one(matchdict))
 
-    def get_all (self, matchdict):
-        docs = mongo.db['users'].find(matchdict)
+    def get_all (self, matchdict = None):
+        if matchdict:
+            docs = mongo.db['users'].find(matchdict)
+        else:
+            docs = mongo.db['users'].find()
         return [User(item) for item in docs]
     
     def save (self):
@@ -71,13 +75,16 @@ class Post (dict):
             self.update(initdict)
 
     def __repr__ (self):
-        return '<Post {0!r}>'.format(self['title'])
+        return '<Post {0!s}>'.format(self['title'])
 
     def get (self, matchdict):
-        return Post(mongo.db['posts'].find_one(matchdict)
+        return Post(mongo.db['posts'].find_one(matchdict))
 
-    def get_all (self, matchdict):
-        docs = mongo.db['posts'].find(matchdict)
+    def get_all (self, matchdict = None):
+        if matchdict:
+            docs = mongo.db['posts'].find(matchdict)
+        else:
+            docs = mongo.db['posts'].find()
         return [Post(item) for item in docs] 
 
     def save (self):
