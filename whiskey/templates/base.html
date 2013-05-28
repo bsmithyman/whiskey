@@ -11,11 +11,6 @@
   <script src="{{ scripturl }}"></script>
     {% endfor %}
   {% endif %}
-  {% if pageinfo['ajax'] and pageinfo['animheader'] %}
-  <script>
-  {% include 'animheader.js' %}
-  </script>
-  {% endif %}
   {% if pageinfo['title'] %}
   <title>{{ pageinfo['title'] }} | {{ pageinfo['sitename'] }}</title>
   {% else %}
@@ -41,9 +36,19 @@
 
   <div id="headingshim">
   {% if pageinfo['heading'] %}
-  <h1>{{ pageinfo['heading'] }}</h1>
+  <h1 id="pageheading">{{ pageinfo['heading'] }}</h1>
   {% endif %}
   </div>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div id="messages"><ul>
+  {% for message in messages %}
+    <li>{{ message }}</li>
+  {% endfor %}
+  </ul></div>
+  {% endif %}
+  {% endwith %}
 
   <div id="content">
   {% block content %}{% endblock %}

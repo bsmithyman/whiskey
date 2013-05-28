@@ -1,5 +1,5 @@
 import os
-from config import basedir, botocreds, cloudcreds, jinja_env
+from config import basedir, botocreds, cloudcreds, jinja_env, staticinfo
 
 from flask import Flask
 from flask.ext.login import LoginManager
@@ -33,5 +33,4 @@ cloud.setkey(**cloudcreds)
 # AWS Setup
 s3 = boto.connect_s3()
 
-
-from whiskey import views, models, forms
+from whiskey import views, models, forms, gfm

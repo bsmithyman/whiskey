@@ -1,7 +1,10 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from whiskey import app, mongo, cloud, boto, cache, s3
-from helper import generate_pageinfo
+from whiskey import app, mongo, cloud, boto, cache, s3, gfm
+from helper import *
+from models import User, Post
+from bson.objectid import ObjectId
+import misaka
 
 # ------------------------------------------------------------------------
 # HTTP Errors
@@ -9,19 +12,21 @@ from helper import generate_pageinfo
 @app.errorhandler(404)
 def page_not_found (error):
     pageinfo = {
-	'title':	'404',
-        'heading':	'you are lost',
+        'title':        '404',
+        'heading':      'you are lost',
     }
-    return render_template('404.html', pageinfo = generate_pageinfo(pageinfo)), 404
+    pageinfo = generate_pageinfo(pageinfo)
+    return render_template('404.html', pageinfo = pageinfo), 404
 
 @app.errorhandler(500)
 def internal_error (error):
     pageinfo = {
-	'title':	'500',
-        'heading':	'computer over',
+        'title':        '500',
+        'heading':      'computer over',
     }
+    pageinfo = generate_pageinfo(pageinfo)
     # Clean up DB, etc.
-    return render_template('500.html', pageinfo = generate_pageinfo(pageinfo)), 500
+    return render_template('500.html', pageinfo = pageinfo), 500
 
 # ------------------------------------------------------------------------
 # Normal Views
@@ -33,19 +38,80 @@ def root ():
 @app.route('/index')
 def index ():
     pageinfo = {
-	'title':	'index',
+        'title':        'index',
+        'header':       'index',
     }
-    return render_template('index.html', pageinfo = generate_pageinfo(pageinfo))
+    pageinfo = generate_pageinfo(pageinfo)
+    posts = Post().get_all()
+    if posts:
+        posts = [dict(post) for post in posts]
+        for post in posts:
+            author = User().get({'_id': post['author']})
+            post.update({'author': author}) 
+        pageinfo.update({'posts': posts})
+    else:
+        flash('There are no posts to display')
+    return render_template('index.html', pageinfo = pageinfo)
 
 @app.route('/animtest')
 def animtest ():
     pageinfo = {
         'ajax':         True,
-        'animheader':   True,
-        'title':	'animtest',
-	'heading':	'animation test',
+        'title':        'animtest',
+        'heading':      'animation test',
     }
-    return render_template('animtest.html', pageinfo = generate_pageinfo(pageinfo))
+    pageinfo = generate_pageinfo(pageinfo)
+    pageinfo = add_animheader(pageinfo)
+    return render_template('animtest.html', pageinfo = pageinfo)
+
+@app.route('/profile/<nickname>')
+def profile (nickname):
+    pageinfo = {
+        'title':        'profile',
+        'heading':      'user profile',
+    } 
+    pageinfo = generate_pageinfo(pageinfo)
+    user = User().get({'nickname': nickname})
+    if user:
+      pageinfo.update({'user': user, 'heading': nickname})
+    else:
+      flash('User {0} not found'.format(nickname))
+    return render_template('profile.html', pageinfo = pageinfo)
+
+@app.route('/users')
+def users ():
+    pageinfo = {
+        'title':        'users',
+        'heading':      'site users',
+    }
+    pageinfo = generate_pageinfo(pageinfo)
+    users = User().get_all()
+    if users:
+        pageinfo.update({'users': User().get_all()})
+    else:
+        flash('There are no users')
+    return render_template('users.html', pageinfo = pageinfo)
+
+@app.route('/post/<identifier>')
+def post (identifier):
+    pageinfo = {
+        'title':        'post',
+        'heading':      'view post',
+    }
+    pageinfo = generate_pageinfo(pageinfo)
+    # This is probably dangerous; TODO: fix Post URL scheme.
+    post = Post().get({'_id': ObjectId(identifier)})
+    if post:
+        post = dict(post)
+        augment = {
+            'html':         misaka.html(gfm.gfm(post['content'])),
+            'author':         User().get({'_id': post['author']}),
+        }
+        post.update(augment)
+        pageinfo.update({'post': post, 'heading': post['title'], 'title': post['title']})
+    else:
+        flash('Post not found: {0}')
+    return render_template('post.html', pageinfo = pageinfo)
 
 # ------------------------------------------------------------------------
 # User Authentication
@@ -53,10 +119,11 @@ def animtest ():
 @app.route('/login', methods = ['GET', 'POST'])
 def login ():
     pageinfo = {
-        'title':	'login',
-	'heading':	'login required',
+        'title':        'login',
+        'heading':      'login required',
     }
-    return render_template('login.html', pageinfo = generate_pageinfo(pageinfo))
+    pageinfo = generate_pageinfo(pageinfo)
+    return render_template('login.html', pageinfo = pageinfo)
 
 @app.route('/logout')
 def logout ():
@@ -123,3 +190,37 @@ def testsuite ():
 def forceerror ():
     raise Exception   
 
+@app.route('/modeltest')
+@login_required
+def modeltest ():
+    a = User()
+    a['nickname'] =     'brendan'
+    a['fullname'] =     'Brendan Smithyman'
+    a['email'] =        'brendan@bitsmithy.net'
+    a['ghlogin'] =      'bsmithyman'
+    a['profile'] =      'This is a bio about me.'
+    a.save()
+
+    beninfo = {
+        'nickname':     'ben',
+        'fullname':     'Ben Postlethwaite',
+        'email':        'post.ben.here@gmail.com',
+        'ghlogin':      'bpostlethwaite',
+        'profile':      'This is a bio about Ben.',
+    }
+         
+    b = User(beninfo)
+    b.save()
+
+    a1 = User().get({'nickname': 'ben'})
+    b1 = User().get_all({'email': a['email']})
+
+    lines = []
+
+    for eadict in [a1, b1[0]]:
+        lines.append('{0!r}'.format(eadict))
+        for key in eadict:
+            lines.append('\t\'{0}\' -> {1}'.format(key, eadict[key]))
+        lines.append('')
+
+    return '\n'.join(lines)

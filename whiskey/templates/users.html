@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+{% if pageinfo['users'] %}
+<div class="userlist">
+  {% for user in pageinfo['foundusers'] %}
+  {% include "userentry.inc" %}
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

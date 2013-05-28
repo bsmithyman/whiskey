@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+{% if pageinfo['post'] %}
+{% with %}
+  {% set post = pageinfo['post'] %}
+  {% set author = pageinfo['post']['author'] %}
+<div class="post">
+  {% include "inlinebio.inc" %}
+  <div class="postbody">
+  {{ post['html']|safe }}
+  </div>
+</div>
+{% endwith %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+{% if pageinfo['user'] %}
+{% with user = pageinfo['user'] %}
+<img src="{{ user.avatar(128) }}" alt="{{ user['fullname'] }}" class="bigavatar" />
+<p class="emailline">{{ user['fullname'] }} &lt;<a href="mailto:{{ user['email'] }}">{{ user['email'] }}</a>&gt;</p>
+<p class="profile">{{ user['profile'] }}</p>
+{% endwith %}
+{% endif %}
+
+{% endblock %}

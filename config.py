@@ -1,4 +1,7 @@
 import os
+from bson.objectid import ObjectId
+import pymongo
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Cross-Site Request Forgery protection
@@ -29,25 +32,12 @@ jinja_env = {
     'lstrip_blocks':	True,
 }
 
-staticinfo = {
-    'siteroot':		'http://www.ostensibly.me/',
-    'media':		'//static.ostensibly.me/',
-    'sitename':		'ostensibly.me',
-    'tagline':		'> powered by whiskey',
-    'stylesheets':	{
-	'':		'stylesheet.css',
-#	'print':	'print.css',
-#	'handheld':	'mobile.css',
-    },
-    'ajax':		False,
-    'animheader':	False,
-    'scripturls':	[
-	'//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js'
-    ],
-    'navigation':	[
-	{'href': '/index',	'title': 'index'},
-	{'href': '/animtest',	'title': 'animtest'},
-	{'href': '/notfound',	'title': '404'},
-	{'href': '/forceerror',	'title': '500'},
-    ],
+siteconfig = {
+    'collection':       'config',
+    'activeid':         ObjectId(os.environ.get('DB_CONFIG_OBJECT')),
 }
+
+dbname = MONGO_URI.split('/')[-1]
+db = pymongo.MongoClient(MONGO_URI)[dbname]
+staticinfo = db[siteconfig['collection']].find_one(siteconfig['activeid'])
+del db
