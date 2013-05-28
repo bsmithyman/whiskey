@@ -39,8 +39,18 @@ def root ():
 def index ():
     pageinfo = {
         'title':        'index',
+        'header':       'index',
     }
     pageinfo = generate_pageinfo(pageinfo)
+    posts = Post().get_all()
+    if posts:
+        posts = [dict(post) for post in posts]
+        for post in posts:
+            author = User().get({'_id': post['author']})
+            post.update({'author': author}) 
+        pageinfo.update({'posts': posts})
+    else:
+        flash('There are no posts to display')
     return render_template('index.html', pageinfo = pageinfo)
 
 @app.route('/animtest')
@@ -58,10 +68,14 @@ def animtest ():
 def profile (nickname):
     pageinfo = {
         'title':        'profile',
-        'heading':      nickname,
+        'heading':      'user profile',
     } 
     pageinfo = generate_pageinfo(pageinfo)
-    pageinfo.update({'founduser': User().get({'nickname': nickname})})
+    user = User().get({'nickname': nickname})
+    if user:
+      pageinfo.update({'user': user, 'heading': nickname})
+    else:
+      flash('User {0} not found'.format(nickname))
     return render_template('profile.html', pageinfo = pageinfo)
 
 @app.route('/users')
@@ -71,21 +85,32 @@ def users ():
         'heading':      'site users',
     }
     pageinfo = generate_pageinfo(pageinfo)
-    pageinfo.update({'foundusers': User().get_all()})
+    users = User().get_all()
+    if users:
+        pageinfo.update({'users': User().get_all()})
+    else:
+        flash('There are no users')
     return render_template('users.html', pageinfo = pageinfo)
 
 @app.route('/post/<identifier>')
 def post (identifier):
     pageinfo = {
         'title':        'post',
-        'heading':      'post heading',
+        'heading':      'view post',
     }
     pageinfo = generate_pageinfo(pageinfo)
     # This is probably dangerous; TODO: fix Post URL scheme.
     post = Post().get({'_id': ObjectId(identifier)})
-    postinfo = dict(post)
-    postinfo.update({'html': misaka.html(gfm.gfm(post['content']))})
-    pageinfo.update({'postinfo': postinfo, 'heading': post['title'], 'title': post['title'], 'author': User().get({'_id': post['author']})})
+    if post:
+        post = dict(post)
+        augment = {
+            'html':         misaka.html(gfm.gfm(post['content'])),
+            'author':         User().get({'_id': post['author']}),
+        }
+        post.update(augment)
+        pageinfo.update({'post': post, 'heading': post['title'], 'title': post['title']})
+    else:
+        flash('Post not found: {0}')
     return render_template('post.html', pageinfo = pageinfo)
 
 # ------------------------------------------------------------------------

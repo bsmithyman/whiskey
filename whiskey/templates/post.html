@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-{% if pageinfo['postinfo'] %}
+{% if pageinfo['post'] %}
+{% with %}
+  {% set post = pageinfo['post'] %}
+  {% set author = pageinfo['post']['author'] %}
 <div class="post">
-  <div class="postheader">
-    <img src="{{ pageinfo['author'].avatar(128) }}" class="bigavatar" />
-    <p>by {{ pageinfo['author']['fullname'] }}</p>
-  </div>
+  {% include "inlinebio.inc" %}
   <div class="postbody">
-  {{ pageinfo['postinfo']['html']|safe }}
+  {{ post['html']|safe }}
   </div>
 </div>
+{% endwith %}
 {% endif %}
-
 {% endblock %}

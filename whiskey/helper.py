@@ -1,4 +1,4 @@
-from config import staticinfo
+from whiskey import staticinfo
 
 def generate_pageinfo (subpageinfo):
     pageinfo = staticinfo.copy()
@@ -9,4 +9,5 @@ def generate_pageinfo (subpageinfo):
 def add_animheader (pageinfo):
     pageinfo = pageinfo.copy()
     pageinfo['scripturls'].append(pageinfo['media'] + 'animheader.js')
+
     return pageinfo
