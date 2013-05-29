@@ -32,12 +32,15 @@ jinja_env = {
     'lstrip_blocks':	True,
 }
 
-siteconfig = {
-    'collection':       'config',
-    'activeid':         ObjectId(os.environ.get('DB_CONFIG_OBJECT')),
+mongo_config_query = {
+    'configtag':        'production',
 }
+
+configtag = os.environ.get('DB_CONFIGTAG')
+if configtag:
+    mongo_config_query['configtag'] = configtag
 
 dbname = MONGO_URI.split('/')[-1]
 db = pymongo.MongoClient(MONGO_URI)[dbname]
-staticinfo = db[siteconfig['collection']].find_one(siteconfig['activeid'])
+staticinfo = db['config'].find_one(mongo_config_query)
 del db
