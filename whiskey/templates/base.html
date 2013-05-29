@@ -3,7 +3,7 @@
 <head>
   {% if pageinfo['stylesheets'] %}
     {% for key in pageinfo['stylesheets'] %}
-  <link rel="stylesheet" type="text/css" {% if key %}media="{{ key }}" {% endif %}href="{{ pageinfo['media'] + pageinfo['stylesheets'][key] }}" />
+  <link rel="stylesheet" type="text/css" {% if key %}media="{{ key }}" {% endif %}href="{{ pageinfo['stylesheets'][key] }}" />
     {% endfor %}
   {% endif %}
   {% if pageinfo['ajax'] and pageinfo['scripturls'] %}
