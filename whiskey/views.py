@@ -3,6 +3,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from whiskey import app, mongo, cloud, boto, cache, s3, gfm
 from helper import *
 from models import User, Post
+import models
 from bson.objectid import ObjectId
 import misaka
 
@@ -16,7 +17,7 @@ def page_not_found (error):
         'heading':      'you are lost',
     }
     pageinfo = generate_pageinfo(pageinfo)
-    return render_template('404.html', pageinfo = pageinfo), 404
+    return render_template('404.html', pageinfo = pageinfo, models = models), 404
 
 @app.errorhandler(500)
 def internal_error (error):
@@ -26,7 +27,7 @@ def internal_error (error):
     }
     pageinfo = generate_pageinfo(pageinfo)
     # Clean up DB, etc.
-    return render_template('500.html', pageinfo = pageinfo), 500
+    return render_template('500.html', pageinfo = pageinfo, models = models), 500
 
 # ------------------------------------------------------------------------
 # Normal Views
@@ -51,7 +52,16 @@ def index ():
         pageinfo.update({'posts': posts})
     else:
         flash('There are no posts to display')
-    return render_template('index.html', pageinfo = pageinfo)
+    return render_template('index.html', pageinfo = pageinfo, models = models)
+
+@app.route('/about')
+def about ():
+    pageinfo = {
+        'title':        'about',
+        'header':       'about',
+    }
+    pageinfo = generate_pageinfo(pageinfo)
+    return render_template('about.html', pageinfo = pageinfo, models = models)
 
 @app.route('/animtest')
 def animtest ():
@@ -62,7 +72,7 @@ def animtest ():
     }
     pageinfo = generate_pageinfo(pageinfo)
     pageinfo = add_animheader(pageinfo)
-    return render_template('animtest.html', pageinfo = pageinfo)
+    return render_template('animtest.html', pageinfo = pageinfo, models = models)
 
 @app.route('/profile/<nickname>')
 def profile (nickname):
@@ -76,7 +86,7 @@ def profile (nickname):
       pageinfo.update({'user': user, 'heading': nickname})
     else:
       flash('User {0} not found'.format(nickname))
-    return render_template('profile.html', pageinfo = pageinfo)
+    return render_template('profile.html', pageinfo = pageinfo, models = models)
 
 @app.route('/users')
 def users ():
@@ -90,7 +100,7 @@ def users ():
         pageinfo.update({'users': User().get_all()})
     else:
         flash('There are no users')
-    return render_template('users.html', pageinfo = pageinfo)
+    return render_template('users.html', pageinfo = pageinfo, models = models)
 
 @app.route('/post/<identifier>')
 def post (identifier):
@@ -111,7 +121,7 @@ def post (identifier):
         pageinfo.update({'post': post, 'heading': post['title'], 'title': post['title']})
     else:
         flash('Post not found: {0}')
-    return render_template('post.html', pageinfo = pageinfo)
+    return render_template('post.html', pageinfo = pageinfo, models = models)
 
 # ------------------------------------------------------------------------
 # User Authentication
@@ -123,7 +133,7 @@ def login ():
         'heading':      'login required',
     }
     pageinfo = generate_pageinfo(pageinfo)
-    return render_template('login.html', pageinfo = pageinfo)
+    return render_template('login.html', pageinfo = pageinfo, models = models)
 
 @app.route('/logout')
 def logout ():

@@ -21,7 +21,7 @@
 <div class="content pure-g-r">
   <div class="header pure-u-1">
     <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
-      <a class="pure-menu-heading" href="{{ url_for('index') }}">{{ pageinfo['sitename'] }}</a>
+      <a id="sitename" class="pure-menu-heading" href="{{ url_for('index') }}">{{ pageinfo['sitename'] }}</a>
       <ul>
       {% for item in pageinfo['navigation'] %}
         <li {% if item['title'] == pageinfo['title'] %}class="pure-menu-selected" %}{% endif %}>

@@ -5,14 +5,14 @@
   {% set post = pageinfo['post'] %}
   {% set author = pageinfo['post']['author'] %}
   <div class="content-ribbon pure-g l-box">
-    <div class="pure-u-3-5">
+    <div class="pure-u-4-5">
       {{ post['html']|safe }}
     </div>
     <div class="pure-u-1-5">
-      <img src="{{ author.avatar(128) }}" class="yui3-img-rounded" /><br />
-      <h3>{{ author['fullname'] }}</h3>
-      <a href="{{ url_for('profile', nickname = author['nickname']) }}" class="yui3-button yui3-button-small">Profile</a>
-      <a href="mailto:{{ author['email'] }}" class="yui3-button yui3-button-small yui-3-button-secondary">Email</a>
+      <img src="{{ author.avatar(128) }}" class="yui3-img-rounded centerimg" /><br />
+      <a href="{{ url_for('profile', nickname = author['nickname']) }}" class="yui3-badge-info">{{ author['fullname'] }}</a>
+      <a href="mailto:{{ author['email'] }}" class="yui3-badge-success">{{ author['email'] }}</a>
+      <a href="{{ pageinfo['ghurlbase'] }}{{ author['ghlogin'] }}" class="yui3-badge-warning">{{ author['ghlogin'] }} on GitHub</a>
     </div>
   </div>
 {% endwith %}
