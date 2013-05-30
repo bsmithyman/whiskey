@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 {% if pageinfo['posts'] %}
-<div class="postblock">
+<div class="pure-g-r">
 {% for post in pageinfo['posts'] %}
 {% with author = post['author'] %}
+<div class="pure-u-1-2">
 {% include "shortpost.inc" %}
+</div>
 {% endwith %}
 {% endfor %}
 </div>

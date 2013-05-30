@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   {% if pageinfo['stylesheets'] %}
-    {% for key in pageinfo['stylesheets'] %}
-  <link rel="stylesheet" type="text/css" {% if key %}media="{{ key }}" {% endif %}href="{{ pageinfo['stylesheets'][key] }}" />
+    {% for item in pageinfo['stylesheets'] %}
+  <link rel="stylesheet" type="text/css" href="{{ item }}" />
     {% endfor %}
   {% endif %}
   {% if pageinfo['ajax'] and pageinfo['scripturls'] %}
@@ -18,42 +18,39 @@
   {% endif %}
 </head>
 <body>
-  <div id="pagewrapper">
-  {% block pageheader %}
-  <div id="pageheader">
-    <span id="sitename">{{ pageinfo['sitename'] }}</span>&nbsp;<span id="tagline">{{ pageinfo['tagline'] }}</span>
-  </div>
-  {% endblock %}
-
-  {% if pageinfo['navigation'] %}
-  <ul id="navlist">
-    {% for item in pageinfo['navigation'] %}
-      <a {% if item['title'] == pageinfo['title'] %}class='current' {% endif %}href="{{ item['href'] }}" title="{{ item['title'] }}"><li>{{ item['title'] }}</li></a>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  <div id="subpagewrapper">
-
-  <div id="headingshim">
-  {% if pageinfo['heading'] %}
-  <h1 id="pageheading">{{ pageinfo['heading'] }}</h1>
-  {% endif %}
+<div class="content pure-g-r">
+  <div class="header pure-u-1">
+    <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
+      <a class="pure-menu-heading" href="{{ url_for('index') }}">{{ pageinfo['sitename'] }}</a>
+      <ul>
+      {% for item in pageinfo['navigation'] %}
+        <li {% if item['title'] == pageinfo['title'] %}class="pure-menu-selected" %}{% endif %}>
+          <a href="{{ item['href'] }}" title="{{ item['title'] }}">
+            {{ item['title'] }}
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
   </div>
 
   {% with messages = get_flashed_messages() %}
   {% if messages %}
-  <div id="messages"><ul>
-  {% for message in messages %}
-    <li>{{ message }}</li>
-  {% endfor %}
-  </ul></div>
+    <div class="pure-u-1 splash csstype">
+      <div class="pure-u-1">
+        <div class="yui3-alert yui3-alert-error">
+          <ul class="list plain">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
   {% endif %}
   {% endwith %}
 
-  <div id="content">
   {% block content %}{% endblock %}
-  </div>
-  </div>
-  </div>
-  </body>
+</div>
+</body>
 </html>

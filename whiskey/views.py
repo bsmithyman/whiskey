@@ -38,8 +38,8 @@ def root ():
 @app.route('/index')
 def index ():
     pageinfo = {
-        'title':        'index',
-        'header':       'index',
+        'title':        'blog',
+        'header':       'blog',
     }
     pageinfo = generate_pageinfo(pageinfo)
     posts = Post().get_all()

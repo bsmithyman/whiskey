@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-{% if pageinfo['user'] %}
+<div class="pure-u-1 splash csstext">
 {% with user = pageinfo['user'] %}
-<img src="{{ user.avatar(128) }}" alt="{{ user['fullname'] }}" class="bigavatar" />
-<p class="emailline">{{ user['fullname'] }} &lt;<a href="mailto:{{ user['email'] }}">{{ user['email'] }}</a>&gt;</p>
-<p class="profile">{{ user['profile'] }}</p>
+  <div class="content-ribbon pure-g">
+    <div class="pure-u-3-4">
+    <h1 class="splash-head">{{ user['fullname'] }}</h1>
+    <h2 class="splash-subhead">{{ user['profile'] }}</h2>
+    </div>
+    <div class="pure-u-1-4">
+      <img src="{{ user.avatar(128) }}" alt="{{ user['fullname'] }}" class="yui3-img-rounded" />
+      <p><a href="mailto:{{ user['email'] }}">{{ user['email'] }}</a>
+      <p>{{ user['ghlogin'] }} <span class="muted">on GitHub</span></p>
+    </div>
+  </div>
 {% endwith %}
-{% endif %}
-
+</div>
 {% endblock %}
