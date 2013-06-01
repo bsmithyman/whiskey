@@ -11,6 +11,7 @@ import misaka
 # HTTP Errors
 
 @app.errorhandler(404)
+@cache.cached(3600)
 def page_not_found (error):
     pageinfo = {
         'title':        '404',
@@ -33,10 +34,12 @@ def internal_error (error):
 # Normal Views
 
 @app.route('/')
+@cache.cached(3600)
 def root ():
     return redirect(url_for('index'))
 
 @app.route('/index')
+@cache.cached(300)
 def index ():
     pageinfo = {
         'title':        'blog',
@@ -55,6 +58,7 @@ def index ():
     return render_template('index.html', pageinfo = pageinfo, models = models)
 
 @app.route('/about')
+@cache.cached(3600)
 def about ():
     pageinfo = {
         'title':        'about',
@@ -75,6 +79,7 @@ def animtest ():
     return render_template('animtest.html', pageinfo = pageinfo, models = models)
 
 @app.route('/profile/<nickname>')
+@cache.cached(300)
 def profile (nickname):
     pageinfo = {
         'title':        'profile',
@@ -89,6 +94,7 @@ def profile (nickname):
     return render_template('profile.html', pageinfo = pageinfo, models = models)
 
 @app.route('/users')
+@cache.cached(3600)
 def users ():
     pageinfo = {
         'title':        'users',
@@ -103,6 +109,7 @@ def users ():
     return render_template('users.html', pageinfo = pageinfo, models = models)
 
 @app.route('/post/<identifier>')
+@cache.cached(300)
 def post (identifier):
     pageinfo = {
         'title':        'post',
