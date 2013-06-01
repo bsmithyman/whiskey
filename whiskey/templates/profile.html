@@ -9,8 +9,8 @@
     </div>
     <div class="pure-u-1-4">
       <img src="{{ user.avatar(192) }}" alt="{{ user['fullname'] }}" class="yui3-img-bordered" />
-      <a href="{{ url_for('profile', nickname = user['nickname']) }}" class="yui3-badge-info">{{ user['fullname'] }}</a>
-      <a href="mailto:{{ user['email'] }}" class="yui3-badge-success">{{ user['email'] }}</a>
+      <a href="{{ url_for('profile', nickname = user['nickname']) }}" class="yui3-badge-info">{{ user['fullname'] }}</a><br />
+      <a href="mailto:{{ user['email'] }}" class="yui3-badge-success">{{ user['email'] }}</a><br />
       <a href="{{ pageinfo['ghurlbase'] }}{{ user['ghlogin'] }}" class="yui3-badge-warning">{{ user['ghlogin'] }} on GitHub</a>
     </div>
   </div>
